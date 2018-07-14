@@ -1,0 +1,15 @@
+{
+  "name": "coffee-gui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aphrodite": "^2.2.2",
+    "vue": "^2.5.16"
+  }
+}
