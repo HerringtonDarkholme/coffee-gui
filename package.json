@@ -9,7 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aphrodite": "^2.2.2",
-    "vue": "^2.5.16"
+    "@types/string-hash": "^1.1.1",
+    "snabbdom": "^0.7.1",
+    "string-hash": "^1.1.3"
+  },
+  "devDependencies": {
+    "typescript": "^3.0.0-rc"
   }
 }
