@@ -5,7 +5,7 @@ import props from 'snabbdom/modules/props'
 import style from 'snabbdom/modules/style'
 import listener from 'snabbdom/modules/eventlisteners'
 
-import { defineReactive, setRootDep } from './component'
+import { defineReactive, setRootDep } from './reactive'
 
 const patch = snabbdom.init([
   klass, props, style, listener
