@@ -49,6 +49,9 @@ export function defineReactive(obj: any): any {
     },
     set(target: any, prop: any, value) {
       target[prop] = value
+      if (prop.startsWith('_')) {
+          return true
+      }
       const dep = deps[prop]
       if (dep) {
         dep.notify()
