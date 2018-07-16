@@ -10,7 +10,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    libraryTarget: 'commonjs2',
   },
   resolve: {
     extensions: ['.ts', '.js']
@@ -21,5 +20,4 @@ module.exports = {
       {test: /\.coffee$/, use: 'coffee-loader'}
     ]
   },
-  target: 'node'
 }

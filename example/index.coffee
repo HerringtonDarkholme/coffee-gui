@@ -1,10 +1,13 @@
-import {component} from '../src'
+import {component, mount} from '../src'
 
-component class MyComponent
-  constuctor: ({@text}) ->
+MyComponent = component class
+  constuctor: () ->
 
 
 MyComponent::render = ->
-    div {} -> @text
+    div {}, =>
+        span {}, => t'Hello world'
+        t 'mmmm'
 
-
+container = document.querySelector('#container')
+mount(container, MyComponent)

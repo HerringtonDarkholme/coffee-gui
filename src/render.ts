@@ -11,8 +11,7 @@ const patch = snabbdom.init([
   klass, props, style, listener
 ])
 
-type Child = VNode | string
-type Children = Child[]
+type Children = VNode[]
 const childrenList: Children[] = []
 const componentList: Component[] = []
 
@@ -38,8 +37,9 @@ interface CompCtor {
 }
 
 function autoBind(self: any) {
-    const methods = Object.getOwnPropertyNames(self.prototype)
-        .filter(k => k !== 'constructor' && typeof self.prototype[k] === 'function')
+    const proto = self.constructor.prototype
+    const methods = Object.getOwnPropertyNames(proto)
+        .filter(k => k !== 'constructor' && typeof proto[k] === 'function')
     for (let m of methods) {
         self[m] = self[m].bind(self)
     }
@@ -80,7 +80,7 @@ export function mount(container: HTMLElement, tag: Tag) {
 
 export function text(t: string) {
   if (childrenList.length > 0) {
-    childrenList[0].push(t)
+    childrenList[0].push(t as any)
   }
   return t
 }
