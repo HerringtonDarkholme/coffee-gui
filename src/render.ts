@@ -46,9 +46,9 @@ function autoBind(self: any) {
 }
 
 export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () => void): VNode {
-  const component = new ctor(attr)
+  let component = new ctor(attr)
+  component = defineReactive(component)
   autoBind(component)
-  defineReactive(component)
   const watcher = setRootDep()
   watcher.callback = () => {
     const newVNode = component.render()
