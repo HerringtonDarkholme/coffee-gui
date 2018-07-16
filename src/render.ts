@@ -15,7 +15,7 @@ type Children = VNode[]
 const childrenList: Children[] = []
 const componentList: Component[] = []
 
-function renderTag(tag: string, attr: object, childrenThunk: () => void): VNode {
+export function renderTag(tag: string, attr: object, childrenThunk: () => void): VNode {
   childrenList.unshift([])
   childrenThunk()
   const children = childrenList.shift() || []
@@ -59,4 +59,11 @@ export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () 
   }
   return vnode
 }
+export interface Tag {
+    (attr: object, childrenThunk: () => void): VNode
+}
 
+export function mount(container: HTMLElement, tag: Tag) {
+    const vnode = tag({}, () => {})
+    patch(container, vnode)
+}

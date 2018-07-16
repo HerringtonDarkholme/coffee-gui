@@ -4,6 +4,7 @@ var webpack = require('webpack')
 module.exports = {
   entry: {
     index: './src/index.ts',
+    example: './example/index.coffee',
   },
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   output: {
@@ -16,7 +17,8 @@ module.exports = {
   },
   module: {
     rules: [
-      {test: /\.ts$/, use: 'ts-loader'}
+      {test: /\.ts$/, use: 'ts-loader'},
+      {test: /\.coffee$/, use: 'coffee-loader'}
     ]
   },
   target: 'node'
