@@ -78,9 +78,10 @@ export function mount(container: HTMLElement, tag: Tag) {
     patch(container, vnode)
 }
 
-export function text(t: string) {
+export function text(eles: string[]) {
+  const t: any = Array.isArray(eles) ? eles[0] : eles
   if (childrenList.length > 0) {
-    childrenList[0].push(t as any)
+    childrenList[0].push(t)
   }
   return t
 }
