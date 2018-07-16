@@ -11,7 +11,8 @@ const patch = snabbdom.init([
   klass, props, style, listener
 ])
 
-type Children = VNode[]
+type Child = VNode | string
+type Children = Child[]
 const childrenList: Children[] = []
 const componentList: Component[] = []
 
@@ -28,7 +29,7 @@ export function renderTag(tag: string, attr: object, childrenThunk: () => void):
 
 interface Component {
   $parent: Component | null
-  $slot: VNode[]
+  $slot: Children
   _vnode: VNode
   render(): VNode
 }
@@ -36,8 +37,17 @@ interface CompCtor {
   new(attr: object): Component
 }
 
+function autoBind(self: any) {
+    const methods = Object.getOwnPropertyNames(self.prototype)
+        .filter(k => k !== 'constructor' && typeof self.prototype[k] === 'function')
+    for (let m of methods) {
+        self[m] = self[m].bind(self)
+    }
+}
+
 export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () => void): VNode {
   const component = new ctor(attr)
+  autoBind(component)
   defineReactive(component)
   const watcher = setRootDep()
   watcher.callback = () => {
@@ -66,4 +76,11 @@ export interface Tag {
 export function mount(container: HTMLElement, tag: Tag) {
     const vnode = tag({}, () => {})
     patch(container, vnode)
+}
+
+export function text(t: string) {
+  if (childrenList.length > 0) {
+    childrenList[0].push(t)
+  }
+  return t
 }
