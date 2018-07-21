@@ -17,7 +17,24 @@ const componentList: Component[] = []
 
 let renderContext: any = null
 
-export function renderTag(tag: string, attr: object, childrenThunk: () => void): VNode {
+type Thunk = () => void
+export function renderTag(tag: string, childrenThunk?: Thunk): VNode
+export function renderTag(tag: string, attr: object, childrenThunk?: Thunk): VNode
+export function renderTag(tag: string, attr?: object | Thunk, childrenThunk?: Thunk): VNode {
+  if (!attr) {
+    attr = {}
+  }
+  if (typeof attr === 'function') {
+    childrenThunk = attr
+    attr = {}
+  }
+  if (!childrenThunk) {
+    childrenThunk = () => {}
+  }
+  return renderTagImpl(tag, attr, childrenThunk)
+}
+
+function renderTagImpl(tag: string, attr: object, childrenThunk: Thunk): VNode {
   childrenList.unshift([])
   childrenThunk.call(renderContext)
   const children = childrenList.shift() || []
@@ -46,8 +63,23 @@ function autoBind(self: any) {
         self[m] = self[m].bind(self)
     }
 }
+export function renderComponent(ctor: CompCtor, childrenThunk?: Thunk): VNode
+export function renderComponent(ctor: CompCtor, attr: object, childrenThunk?: Thunk): VNode
+export function renderComponent(ctor: CompCtor, attr?: object | Thunk, childrenThunk?: Thunk): VNode {
+  if (!attr) {
+    attr = {}
+  }
+  if (typeof attr === 'function') {
+    childrenThunk = attr
+    attr = {}
+  }
+  if (!childrenThunk) {
+    childrenThunk = () => {}
+  }
+  return renderComponentImpl(ctor, attr, childrenThunk)
+}
 
-export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () => void): VNode {
+function renderComponentImpl(ctor: CompCtor, attr: object, childrenThunk: () => void): VNode {
   let component = new ctor(attr)
   component = defineReactive(component)
   autoBind(component)
