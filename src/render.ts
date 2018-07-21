@@ -15,9 +15,11 @@ type Children = VNode[]
 const childrenList: Children[] = []
 const componentList: Component[] = []
 
+let renderContext: any = null
+
 export function renderTag(tag: string, attr: object, childrenThunk: () => void): VNode {
   childrenList.unshift([])
-  childrenThunk()
+  childrenThunk.call(renderContext)
   const children = childrenList.shift() || []
   const vnode = snabbdom.h(tag, attr, children)
   if (childrenList.length > 0) {
@@ -51,7 +53,10 @@ export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () 
   autoBind(component)
   const watcher = setRootDep()
   watcher.callback = () => {
+    let lastContext = renderContext
+    renderContext = component
     const newVNode = component.render()
+    renderContext = lastContext
     patch(component._vnode, newVNode)
     component._vnode = newVNode
 
@@ -59,10 +64,13 @@ export function renderComponent(ctor: CompCtor, attr: object, childrenThunk: () 
   component.$parent = componentList[0]
   componentList.unshift(component)
   childrenList.unshift([])
-  childrenThunk()
+  childrenThunk.call(renderContext)
   const children = childrenList.shift() || []
   component.$slot = children
+  let lastContext = renderContext
+  renderContext = component
   const vnode = component.render()
+  renderContext = lastContext
   component._vnode = vnode
   if (childrenList.length > 0) {
     childrenList[0].push(vnode)

@@ -1,4 +1,4 @@
-import { renderComponent} from './render'
+import { renderComponent } from './render'
 
 export function component(cls: any) {
   const originProto = cls.prototype

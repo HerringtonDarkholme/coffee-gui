@@ -9,9 +9,9 @@ MyComponent = component class
 
 
 MyComponent::render = ->
-    div {}, =>
-        span on: {@click}, => t'Hello world'
-        p {}, =>
+    div {}, ->
+        span on: {@click}, -> t'Hello world'
+        p {}, ->
             t(@text)
 
 container = document.querySelector('#container')
