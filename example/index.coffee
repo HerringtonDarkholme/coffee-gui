@@ -9,10 +9,9 @@ MyComponent = component class
 
 
 MyComponent::render = ->
-    div {}, ->
+    div ->
         span on: {@click}, -> t'Hello world'
-        p {}, ->
-            t(@text)
+        p -> t(@text)
 
 container = document.querySelector('#container')
 mount(container, MyComponent)
