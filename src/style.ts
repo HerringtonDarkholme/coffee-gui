@@ -8,11 +8,13 @@ function hashStyle(styleObj: StyleObj) {
   return stringHash(JSON.stringify(styleObj)).toString(36)
 }
 
+const prefix = '$$style$$'
+
 class Style {
   hash: string
 
   constructor(private styleObj: StyleObj) {
-    this.hash = hashStyle(styleObj)
+    this.hash = prefix + hashStyle(styleObj)
   }
 
   *[Symbol.iterator]() {
@@ -28,16 +30,28 @@ class Style {
   }
 }
 
-export function style(...objs: StyleObj[]): StyleObj {
+export function style(...objs: StyleObj[]): Style {
   const ret: StyleObj = {}
   for (let obj of objs) {
     for (let key in obj) {
       ret[key] = obj[key]
     }
   }
-  return ret
+  return new Style(ret)
 }
 
 export function getStyle(hash: string): StyleObj {
   return styleMap.get(hash) || {}
+}
+
+export function stylish(func: any): any {
+  return new Proxy(func, {
+    get(target: any, prop: any) {
+      if (prop.startsWith(prefix)) {
+        func.__style__ = styleMap.get(prop)
+        return target
+      }
+      return func[prop]
+    }
+  })
 }

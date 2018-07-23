@@ -1,4 +1,14 @@
-import {component, mount} from '../src'
+import {component, mount, style} from '../src'
+
+white = style
+  background: 'grey'
+  color: 'white'
+
+blue = style(
+  white...
+  textAlign: 'center'
+  background: 'blue'
+)
 
 MyComponent = component class
   constructor: () ->
@@ -10,8 +20,8 @@ MyComponent = component class
 
 MyComponent::render = ->
     div ->
-        span on: {@click}, -> t'Hello world'
-        p -> t(@text)
+        span[white] on: {@click}, -> t'Hello world'
+        p[blue] -> t(@text)
 
 container = document.querySelector('#container')
 mount(container, MyComponent)
